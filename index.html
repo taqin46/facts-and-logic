@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belajar Explanation Text & Subject-Verb Agreement</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+            animation: slideUp 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+            0% { opacity: 0; transform: scale(0.9) translateY(20px); }
+            100% { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .animate-pop-in {
+            animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+        /* Custom Scrollbar for Quiz Container */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 8px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center py-6 px-3 sm:px-6 relative overflow-x-hidden">
+
+    <!-- Canvas Confetti Overlay -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 w-full h-full"></canvas>
+
+    <!-- Main Application Container -->
+    <div class="max-w-4xl w-full bg-white rounded-3xl shadow-xl shadow-slate-200/60 border border-slate-100 overflow-hidden mb-12">
+        
+        <!-- App Header -->
+        <header class="bg-gradient-to-br from-indigo-600 via-blue-600 to-sky-600 p-6 sm:p-8 text-white relative overflow-hidden">
+            <div class="absolute -right-10 -bottom-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute right-20 -top-10 w-32 h-32 bg-sky-300/20 rounded-full blur-xl pointer-events-none"></div>
+            
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 relative z-10">
+                <div>
+                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md text-xs font-semibold tracking-wider rounded-full text-blue-50 mb-2 uppercase">
+                        Interactive Learning Module
+                    </span>
+                    <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight">Mastering Explanation Text</h1>
+                    <p class="text-blue-100 text-sm sm:text-base mt-1 font-medium">
+                        Scientific Facts & Subject-Verb Agreement Mastery
+                    </p>
+                </div>
+                <!-- Audio Status Indicator / Toggle -->
+                <button id="audio-toggle-btn" onclick="toggleAudioFeedback()" class="flex items-center gap-2 px-3.5 py-2 bg-white/15 hover:bg-white/25 backdrop-blur-md rounded-xl text-xs font-semibold transition border border-white/20">
+                    <svg id="sound-icon-on" class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+                    <span id="sound-status-text">Sound: ON</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Navigation Menu Tabs -->
+        <nav class="flex flex-wrap border-b border-slate-200 bg-slate-50/80 p-2 gap-1 sm:gap-2">
+            <button onclick="switchTab('intro')" id="btn-intro" class="tab-btn flex-1 min-w-[120px] py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-center transition-all duration-200 text-slate-600 hover:text-indigo-600 hover:bg-white">
+                1. Introduction
+            </button>
+            <button onclick="switchTab('sv')" id="btn-sv" class="tab-btn flex-1 min-w-[120px] py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-center transition-all duration-200 text-slate-600 hover:text-indigo-600 hover:bg-white">
+                2. Scientific Facts
+            </button>
+            <button onclick="switchTab('future')" id="btn-future" class="tab-btn flex-1 min-w-[120px] py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-center transition-all duration-200 text-slate-600 hover:text-indigo-600 hover:bg-white">
+                3. Future & Tenses
+            </button>
+            <button onclick="switchTab('practice')" id="btn-practice" class="tab-btn flex-1 min-w-[120px] py-3 px-3 text-xs sm:text-sm font-bold rounded-xl text-center transition-all duration-200 text-slate-600 hover:text-indigo-600 hover:bg-white">
+                4. Practice (25 Soal)
+            </button>
+        </nav>
+
+        <!-- Tab Contents Wrapper -->
+        <div class="p-5 sm:p-8">
+            
+            <!-- TAB 1: INTRODUCTION -->
+            <section id="intro" class="tab-content active">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-2.5 h-8 bg-indigo-600 rounded-full"></span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Apa itu Explanation Text?</h2>
+                </div>
+
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                    <strong>Explanation Text</strong> adalah jenis teks Bahasa Inggris yang menerangkan proses terjadinya suatu fenomena alam, sosial, ilmu pengetahuan, maupun budaya (mengapa dan bagaimana sesuatu bisa terjadi).
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+                    <!-- General Structure -->
+                    <div class="bg-indigo-50/60 border border-indigo-100 p-5 rounded-2xl">
+                        <h3 class="text-base font-bold text-indigo-900 mb-3 flex items-center gap-2">
+                            <span class="bg-indigo-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">1</span>
+                            General Structure (Struktur Teks)
+                        </h3>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                            <li class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-sm">
+                                <strong class="text-indigo-700">1. General Statement:</strong> Pernyataan umum tentang topik/fenomena yang hendak dijelaskan.
+                            </li>
+                            <li class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-sm">
+                                <strong class="text-indigo-700">2. Sequenced Explanation:</strong> Tahapan proses sebab-akibat (mengapa & bagaimana) secara berurutan.
+                            </li>
+                            <li class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-sm">
+                                <strong class="text-indigo-700">3. Closing (Opsional):</strong> Kesimpulan atau penutup dari proses tersebut.
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Language Features -->
+                    <div class="bg-sky-50/60 border border-sky-100 p-5 rounded-2xl">
+                        <h3 class="text-base font-bold text-sky-900 mb-3 flex items-center gap-2">
+                            <span class="bg-sky-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">2</span>
+                            Language Features (Ciri Kebahasaan)
+                        </h3>
+                        <ul class="space-y-2.5 text-xs sm:text-sm text-slate-700">
+                            <li class="bg-white p-2.5 rounded-xl border border-sky-100 shadow-sm">
+                                Menggunakan <strong>Simple Present Tense</strong> (menyatakan fakta umum/ilmiah).
+                            </li>
+                            <li class="bg-white p-2.5 rounded-xl border border-sky-100 shadow-sm">
+                                Menggunakan <strong>Action Verbs</strong> (kata kerja aksi seperti <em>absorb, heat, flow</em>).
+                            </li>
+                            <li class="bg-white p-2.5 rounded-xl border border-sky-100 shadow-sm">
+                                Menggunakan <strong>Passive Voice</strong> (fokus pada proses, bukan pelakunya).
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Sequential Conjunctions Interactive Area -->
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl">
+                    <h3 class="text-sm font-bold text-slate-800 mb-2">Sequential Conjunctions (Kata Hubung Urutan)</h3>
+                    <p class="text-xs sm:text-sm text-slate-600 mb-4">
+                        Klik kata hubung di bawah untuk mendengarkan efek suara dan memahami urutan kronologis dalam teks eksplanasi:
+                    </p>
+                    <div class="flex flex-wrap gap-2.5">
+                        <button onclick="playInteractiveSound('pop'); highlightWord(this)" class="px-4 py-2 bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm active:scale-95">First (Pertama)</button>
+                        <button onclick="playInteractiveSound('pop'); highlightWord(this)" class="px-4 py-2 bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm active:scale-95">Then (Kemudian)</button>
+                        <button onclick="playInteractiveSound('pop'); highlightWord(this)" class="px-4 py-2 bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm active:scale-95">Next (Selanjutnya)</button>
+                        <button onclick="playInteractiveSound('pop'); highlightWord(this)" class="px-4 py-2 bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm active:scale-95">After that (Setelah itu)</button>
+                        <button onclick="playInteractiveSound('pop'); highlightWord(this)" class="px-4 py-2 bg-white hover:bg-indigo-600 hover:text-white border border-slate-300 rounded-xl text-xs sm:text-sm font-semibold transition shadow-sm active:scale-95">Finally (Akhirnya)</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: SCIENTIFIC FACTS & SUBJECT-VERB AGREEMENT -->
+            <section id="sv" class="tab-content">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-2.5 h-8 bg-blue-600 rounded-full"></span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Fakta Ilmiah & Subject-Verb Agreement</h2>
+                </div>
+
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                    Karena <em>Explanation Text</em> berisikan <strong>Fakta Ilmiah (Scientific Facts)</strong>, rumus grammar utama yang wajib dikuasai adalah <strong>Simple Present Tense</strong> dengan aturan <strong class="text-blue-600">Subject-Verb Agreement</strong>.
+                </p>
+
+                <!-- Rules Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+                    <!-- Singular Subject Rule -->
+                    <div class="bg-rose-50/70 border border-rose-200 p-5 rounded-2xl">
+                        <div class="flex items-center gap-2 text-rose-700 font-bold mb-2 text-sm sm:text-base">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                            Subjek Tunggal (Singular Subject)
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            Subjek 1 benda/orang (<em>He, She, It, Water, The sun, A earthquake</em>) &rarr; Kata kerja ditambah <strong class="text-rose-600">-s / -es</strong>.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-rose-100 text-xs sm:text-sm font-medium space-y-1 text-slate-800">
+                            <p>• The sun <span class="text-rose-600 font-bold underline">heats</span> the ocean surface.</p>
+                            <p>• Water <span class="text-rose-600 font-bold underline">evaporates</span> into vapor.</p>
+                        </div>
+                    </div>
+
+                    <!-- Plural Subject Rule -->
+                    <div class="bg-emerald-50/70 border border-emerald-200 p-5 rounded-2xl">
+                        <div class="flex items-center gap-2 text-emerald-700 font-bold mb-2 text-sm sm:text-base">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+                            Subjek Jamak (Plural Subject)
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            Subjek &gt;1 benda/orang (<em>They, We, You, Clouds, Rivers, Earthquakes</em>) &rarr; Kata kerja dasar <strong class="text-emerald-600">(Tanpa -s/-es)</strong>.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-emerald-100 text-xs sm:text-sm font-medium space-y-1 text-slate-800">
+                            <p>• Clouds <span class="text-emerald-600 font-bold underline">form</span> in the atmosphere.</p>
+                            <p>• Rivers <span class="text-emerald-600 font-bold underline">flow</span> toward the ocean.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mini Quick Practice Check -->
+                <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl">
+                    <h3 class="text-sm font-bold text-slate-800 mb-4 flex items-center gap-2">
+                        <span>⚡</span> Check Point Pemahaman Cepat
+                    </h3>
+
+                    <div class="space-y-4">
+                        <!-- Q1 -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-800 mb-3">
+                                1. The gravity of the moon ( <span class="text-indigo-600">...</span> ) ocean tides on Earth.
+                            </p>
+                            <div class="flex gap-2">
+                                <button onclick="checkMiniQuiz(1, 'cause', false)" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs sm:text-sm font-medium rounded-lg transition">cause</button>
+                                <button onclick="checkMiniQuiz(1, 'causes', true)" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs sm:text-sm font-medium rounded-lg transition">causes</button>
+                            </div>
+                            <div id="mini-fb-1" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+
+                        <!-- Q2 -->
+                        <div class="bg-white p-4 rounded-xl border border-slate-200">
+                            <p class="text-xs sm:text-sm font-semibold text-slate-800 mb-3">
+                                2. Photosynthesis and cellular respiration ( <span class="text-indigo-600">...</span> ) the oxygen level.
+                            </p>
+                            <div class="flex gap-2">
+                                <button onclick="checkMiniQuiz(2, 'maintain', true)" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs sm:text-sm font-medium rounded-lg transition">maintain</button>
+                                <button onclick="checkMiniQuiz(2, 'maintains', false)" class="px-3.5 py-1.5 bg-slate-100 hover:bg-slate-200 text-xs sm:text-sm font-medium rounded-lg transition">maintains</button>
+                            </div>
+                            <div id="mini-fb-2" class="mt-2 text-xs font-semibold hidden"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: FUTURE TENSE & OTHER TENSES -->
+            <section id="future" class="tab-content">
+                <div class="flex items-center gap-3 mb-6">
+                    <span class="w-2.5 h-8 bg-sky-600 rounded-full"></span>
+                    <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Future Tense & Variasi Tenses Lain</h2>
+                </div>
+
+                <p class="text-slate-600 text-sm sm:text-base leading-relaxed mb-6">
+                    Meskipun Simple Present Tense adalah tenses utama, dalam teks eksplanasi kita sering menggunakan <strong>Future Tense</strong> untuk menyatakan <em>dampak/akibat masa depan</em> dari suatu fenomena, atau <strong>Present Continuous</strong> untuk menjelaskan proses yang sedang terus berlangsung.
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
+                    <!-- Simple Future Tense -->
+                    <div class="bg-sky-50/70 border border-sky-200 p-5 rounded-2xl">
+                        <div class="flex items-center gap-2 text-sky-800 font-bold mb-2 text-sm sm:text-base">
+                            <span class="px-2 py-0.5 bg-sky-200 text-sky-800 text-xs rounded-md">1</span>
+                            Simple Future Tense (Predicting Results)
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            Digunakan untuk memprediksi konsekuensi atau dampak yang <em>akan terjadi</em> di akhir proses.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-sky-100 text-xs sm:text-sm font-medium space-y-1">
+                            <p class="text-sky-900 font-bold">Rumus: Subject + WILL + Verb 1</p>
+                            <p class="text-slate-700 italic">"If rain continues, the river <span class="text-sky-600 font-bold underline">will overflow</span>."</p>
+                        </div>
+                    </div>
+
+                    <!-- Present Continuous Tense -->
+                    <div class="bg-amber-50/70 border border-amber-200 p-5 rounded-2xl">
+                        <div class="flex items-center gap-2 text-amber-800 font-bold mb-2 text-sm sm:text-base">
+                            <span class="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded-md">2</span>
+                            Present Continuous Tense (Ongoing Action)
+                        </div>
+                        <p class="text-xs sm:text-sm text-slate-600 mb-3">
+                            Digunakan saat menggambarkan proses dinamis yang sedang berlangsung saat perubahan fenomena terjadi.
+                        </p>
+                        <div class="bg-white p-3 rounded-xl border border-amber-100 text-xs sm:text-sm font-medium space-y-1">
+                            <p class="text-amber-900 font-bold">Rumus: Subject + IS/AM/ARE + Verb-ing</p>
+                            <p class="text-slate-700 italic">"Global temperatures <span class="text-amber-600 font-bold underline">are rising</span> rapidly."</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pro Tip Banner -->
+                <div class="bg-slate-900 text-white p-6 rounded-2xl shadow-md text-center">
+                    <span class="inline-block p-2 bg-amber-400 text-slate-900 rounded-full text-xs font-bold mb-2">💡 Tips Cepat Pembelajaran</span>
+                    <h3 class="text-base sm:text-lg font-bold mb-1">Kapan Pakai Present vs Future?</h3>
+                    <p class="text-xs sm:text-sm text-slate-300 max-w-xl mx-auto">
+                        Gunakan <strong>Simple Present</strong> untuk langkah-langkah fakta proses utama (<em>The Process</em>). Gunakan <strong>Future Tense (Will)</strong> saat menjelaskan dampak akhir yang akan muncul akibat fakta tersebut (<em>The Result</em>).
+                    </p>
+                </div>
+            </section>
+
+            <!-- TAB 4: PRACTICE (25 QUESTIONS) -->
+            <section id="practice" class="tab-content">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2.5 h-8 bg-emerald-600 rounded-full"></span>
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800">Modul Latihan (25 Soal)</h2>
+                    </div>
+                    <span class="text-xs font-semibold px-3 py-1 bg-emerald-100 text-emerald-800 rounded-full w-fit">
+                        Subject-Verb Agreement Focus
+                    </span>
+                </div>
+
+                <p class="text-slate-600 text-xs sm:text-sm mb-6">
+                    Pilihlah bentuk kata kerja yang paling tepat sesuai dengan aturan kesesuaian subjek dan kata kerja (Subject-Verb Agreement) pada kalimat fakta ilmiah di bawah ini:
+                </p>
+
+                <!-- Validation Warning Message Box -->
+                <div id="validation-alert" class="hidden mb-6 p-4 bg-rose-100 border border-rose-300 text-rose-800 rounded-2xl text-xs sm:text-sm font-semibold flex items-center gap-3">
+                    <svg class="w-5 h-5 text-rose-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                    <span id="validation-text">Harap isi semua soal terlebih dahulu sebelum mengumpulkan!</span>
+                </div>
+
+                <!-- Questions Container -->
+                <div id="quiz-questions-list" class="space-y-4 max-h-[620px] overflow-y-auto pr-1.5 p-1">
+                    <!-- Populated via JavaScript -->
+                </div>
+
+                <!-- Submit Button Container -->
+                <div class="mt-8 text-center pt-4 border-t border-slate-200">
+                    <button onclick="submitPracticeQuiz()" class="w-full sm:w-auto px-10 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-base rounded-2xl shadow-lg shadow-emerald-600/30 transition-all hover:scale-[1.02] active:scale-95 focus:outline-none flex items-center justify-center gap-2 mx-auto">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Submit Answers & See Score
+                    </button>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- RESULT CELEBRATION MODAL -->
+    <div id="result-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl relative text-center border border-slate-100 animate-pop-in">
+            
+            <!-- Modal Emoji Badge -->
+            <div id="modal-emoji-badge" class="w-20 h-20 bg-emerald-100 rounded-full flex items-center justify-center text-4xl mx-auto mb-4 border-4 border-white shadow-md">
+                🎉
+            </div>
+
+            <h3 id="modal-title" class="text-2xl sm:text-3xl font-extrabold text-slate-800 mb-1">
+                Selamat! Kamu Luar Biasa!
+            </h3>
+            <p id="modal-subtitle" class="text-xs sm:text-sm text-slate-500 font-medium mb-6">
+                Kamu telah menyelesaikan 25 soal latihan dengan sukses!
+            </p>
+
+            <!-- Score Cards Grid -->
+            <div class="grid grid-cols-3 gap-3 mb-6">
+                <div class="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                    <span class="text-[10px] uppercase tracking-wider text-slate-400 font-bold block">Skor Akhir</span>
+                    <span id="modal-score" class="text-2xl sm:text-3xl font-black text-emerald-600">100</span>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
+                    <span class="text-[10px] uppercase tracking-wider text-emerald-600 font-bold block">Benar ✅</span>
+                    <span id="modal-correct" class="text-2xl sm:text-3xl font-extrabold text-emerald-700">25</span>
+                </div>
+                <div class="bg-rose-50 p-3 rounded-2xl border border-rose-100">
+                    <span class="text-[10px] uppercase tracking-wider text-rose-600 font-bold block">Salah ❌</span>
+                    <span id="modal-wrong" class="text-2xl sm:text-3xl font-extrabold text-rose-700">0</span>
+                </div>
+            </div>
+
+            <!-- Feedback Message -->
+            <p id="modal-feedback-msg" class="text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 p-3.5 rounded-xl mb-6">
+                Pemahaman Subject-Verb Agreement kamu luar biasa mantap!
+            </p>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-3">
+                <button onclick="closeModalViewDiscussion()" class="flex-1 py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm rounded-xl transition shadow-md">
+                    Lihat Pembahasan Lengkap
+                </button>
+                <button onclick="resetPracticeQuiz()" class="flex-1 py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm rounded-xl transition">
+                    Coba Lagi 🔄
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================
+           1. WEB AUDIO API SYNTHESIZER (No external audio files!)
+           ========================================================= */
+        let audioCtx = null;
+        let isSoundEnabled = true;
+
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function toggleAudioFeedback() {
+            isSoundEnabled = !isSoundEnabled;
+            const statusText = document.getElementById('sound-status-text');
+            statusText.innerText = isSoundEnabled ? 'Sound: ON' : 'Sound: OFF';
+            if (isSoundEnabled) {
+                playInteractiveSound('pop');
+            }
+        }
+
+        function playInteractiveSound(type) {
+            if (!isSoundEnabled) return;
+            try {
+                initAudioContext();
+                if (!audioCtx) return;
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'click' || type === 'pop') {
+                    // Crisp Pop sound for buttons / selections
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(520, now);
+                    osc.frequency.exponentialRampToValueAtTime(180, now + 0.04);
+
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.04);
+
+                } else if (type === 'correct') {
+                    // Pleasant High Chime
+                    const osc = audioCtx.createOscillator();
+                    const gain = audioCtx.createGain();
+
+                    osc.type = 'triangle';
+                    osc.frequency.setValueAtTime(587.33, now); // D5
+                    osc.frequency.setValueAtTime(880, now + 0.08); // A5
+
+                    gain.gain.setValueAtTime(0.25, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.25);
+
+                    osc.connect(gain);
+                    gain.connect(audioCtx.destination);
+
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+
+                } else if (type === 'fanfare') {
+                    // Victorious Celebration Fanfare Melody
+                    const notes = [
+                        { freq: 523.25, duration: 0.1, delay: 0 },    // C5
+                        { freq: 659.25, duration: 0.1, delay: 0.1 },  // E5
+                        { freq: 783.99, duration: 0.1, delay: 0.2 },  // G5
+                        { freq: 1046.50, duration: 0.35, delay: 0.3 } // C6
+                    ];
+
+                    notes.forEach(n => {
+                        const osc = audioCtx.createOscillator();
+                        const gain = audioCtx.createGain();
+                        const startTime = now + n.delay;
+
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(n.freq, startTime);
+
+                        gain.gain.setValueAtTime(0.25, startTime);
+                        gain.gain.exponentialRampToValueAtTime(0.001, startTime + n.duration);
+
+                        osc.connect(gain);
+                        gain.connect(audioCtx.destination);
+
+                        osc.start(startTime);
+                        osc.stop(startTime + n.duration);
+                    });
+                }
+            } catch (e) {
+                console.log("Audio play error:", e);
+            }
+        }
+
+        /* =========================================================
+           2. HTML5 CANVAS CONFETTI PARTICLE SYSTEM
+           ========================================================= */
+        const confettiCanvas = document.getElementById('confetti-canvas');
+        const confettiCtx = confettiCanvas.getContext('2d');
+        let confettiParticles = [];
+        let confettiAnimationId = null;
+
+        function resizeConfettiCanvas() {
+            confettiCanvas.width = window.innerWidth;
+            confettiCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeConfettiCanvas);
+
+        function triggerConfettiBurst() {
+            resizeConfettiCanvas();
+            confettiParticles = [];
+            const colors = ['#f43f5e', '#10b981', '#3b82f6', '#f59e0b', '#8b5cf6', '#ec4899', '#06b6d4', '#eab308'];
+
+            // Generate 160 colorful particles
+            for (let i = 0; i < 160; i++) {
+                confettiParticles.push({
+                    x: Math.random() * confettiCanvas.width,
+                    y: Math.random() * (confettiCanvas.height * 0.4) - (confettiCanvas.height * 0.4),
+                    size: Math.random() * 8 + 6,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vx: (Math.random() - 0.5) * 6,
+                    vy: Math.random() * 5 + 4,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: (Math.random() - 0.5) * 10,
+                    opacity: 1
+                });
+            }
+
+            if (confettiAnimationId) cancelAnimationFrame(confettiAnimationId);
+            renderConfettiLoop();
+        }
+
+        function renderConfettiLoop() {
+            confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            let activeCount = 0;
+
+            confettiParticles.forEach(p => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.rotation += p.rotationSpeed;
+
+                if (p.y < confettiCanvas.height + 20) {
+                    activeCount++;
+                }
+
+                confettiCtx.save();
+                confettiCtx.translate(p.x, p.y);
+                confettiCtx.rotate((p.rotation * Math.PI) / 180);
+                confettiCtx.fillStyle = p.color;
+                confettiCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                confettiCtx.restore();
+            });
+
+            if (activeCount > 0) {
+                confettiAnimationId = requestAnimationFrame(renderConfettiLoop);
+            } else {
+                confettiCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+            }
+        }
+
+        /* =========================================================
+           3. TAB NAVIGATION SYSTEM
+           ========================================================= */
+        function switchTab(tabId) {
+            playInteractiveSound('pop');
+            
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(c => c.classList.remove('active'));
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                btn.classList.remove('bg-white', 'text-indigo-600', 'shadow-sm');
+                btn.classList.add('text-slate-600');
+            });
+
+            document.getElementById(tabId).classList.add('active');
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            activeBtn.classList.remove('text-slate-600');
+            activeBtn.classList.add('bg-white', 'text-indigo-600', 'shadow-sm');
+        }
+
+        function highlightWord(el) {
+            el.classList.add('bg-indigo-600', 'text-white');
+            setTimeout(() => {
+                el.classList.remove('bg-indigo-600', 'text-white');
+            }, 600);
+        }
+
+        /* =========================================================
+           4. TAB 2 MINI CHECKPOINT LOGIC
+           ========================================================= */
+        function checkMiniQuiz(qNum, selectedWord, isCorrect) {
+            const fb = document.getElementById(`mini-fb-${qNum}`);
+            fb.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+
+            if (isCorrect) {
+                playInteractiveSound('correct');
+                fb.classList.add('text-emerald-600');
+                fb.innerHTML = `✅ Benar! Subjeknya membutuhkan kata kerja ini (${selectedWord}).`;
+            } else {
+                playInteractiveSound('pop');
+                fb.classList.add('text-rose-600');
+                fb.innerHTML = `❌ Kurang tepat. Ingat kembali aturan Singular vs Plural subject!`;
+            }
+        }
+
+        /* =========================================================
+           5. TAB 4 PRACTICE MODULE (25 QUESTIONS DATA & RENDER)
+           ========================================================= */
+        const practiceData = [
+            { id: 1, sentence: "The sun ___ in the east every morning.", options: ["rise", "rises"], answer: "rises", reason: "'The sun' adalah subjek tunggal (Singular), maka kata kerja ditambahi -s." },
+            { id: 2, sentence: "Water ___ into steam when heated to 100°C.", options: ["evaporate", "evaporates"], answer: "evaporates", reason: "'Water' adalah Uncountable Noun (dianggap Singular)." },
+            { id: 3, sentence: "The train to Tebing Tinggi ___ at 08:00 AM sharp.", options: ["depart", "departs"], answer: "departs", reason: "Jadwal/Subjek tunggal 'The train' menggunakan kata kerja -s (departs)." },
+            { id: 4, sentence: "Tectonic plates ___ against each other, causing earthquakes.", options: ["slide", "slides"], answer: "slide", reason: "'Tectonic plates' adalah subjek jamak (Plural), kata kerja tanpa -s." },
+            { id: 5, sentence: "A tsunami usually ___ after an underwater earthquake.", options: ["occur", "occurs"], answer: "occurs", reason: "'A tsunami' adalah subjek tunggal (Singular)." },
+            { id: 6, sentence: "Plant roots ___ water and minerals from the soil.", options: ["absorb", "absorbs"], answer: "absorb", reason: "'Plant roots' jamak (Plural), maka kata kerjanya 'absorb'." },
+            { id: 7, sentence: "Deforestation ___ severe soil erosion in hilly areas.", options: ["cause", "causes"], answer: "causes", reason: "'Deforestation' adalah kata benda tunggal." },
+            { id: 8, sentence: "Heavy rainfall ___ flash floods in urban areas.", options: ["trigger", "triggers"], answer: "triggers", reason: "'Heavy rainfall' (Singular) &rarr; triggers." },
+            { id: 9, sentence: "Global warming ___ weather patterns across the world.", options: ["affect", "affects"], answer: "affects", reason: "'Global warming' (Singular) &rarr; affects." },
+            { id: 10, sentence: "Volcanoes ___ when magma escapes to the surface.", options: ["erupt", "erupts"], answer: "erupt", reason: "'Volcanoes' adalah jamak (Plural) &rarr; erupt." },
+            { id: 11, sentence: "The moon ___ around the Earth once every 27 days.", options: ["orbit", "orbits"], answer: "orbits", reason: "'The moon' tunggal &rarr; orbits." },
+            { id: 12, sentence: "Many animals ___ their natural habitats due to climate change.", options: ["lose", "loses"], answer: "lose", reason: "'Many animals' adalah subjek jamak (Plural)." },
+            { id: 13, sentence: "Condensation ___ clouds when water vapor cools down.", options: ["form", "forms"], answer: "forms", reason: "'Condensation' adalah tunggal &rarr; forms." },
+            { id: 14, sentence: "Scientists ___ natural phenomena using scientific methods.", options: ["explain", "explains"], answer: "explain", reason: "'Scientists' adalah jamak &rarr; explain." },
+            { id: 15, sentence: "Gravitational force ___ objects toward the center of the Earth.", options: ["pull", "pulls"], answer: "pulls", reason: "'Gravitational force' tunggal &rarr; pulls." },
+            { id: 16, sentence: "Photosynthesis ___ sunlight, carbon dioxide, and water.", options: ["require", "requires"], answer: "requires", reason: "'Photosynthesis' adalah tunggal &rarr; requires." },
+            { id: 17, sentence: "Raindrops ___ when water droplets in clouds become too heavy.", options: ["fall", "falls"], answer: "fall", reason: "'Raindrops' jamak &rarr; fall." },
+            { id: 18, sentence: "An earthquake ___ sudden tremors on the ground.", options: ["produce", "produces"], answer: "produces", reason: "'An earthquake' tunggal &rarr; produces." },
+            { id: 19, sentence: "A rainbow ___ when sunlight refracts through water droplets.", options: ["appear", "appears"], answer: "appears", reason: "'A rainbow' tunggal &rarr; appears." },
+            { id: 20, sentence: "Mammals ___ birth to live young rather than laying eggs.", options: ["give", "gives"], answer: "give", reason: "'Mammals' jamak &rarr; give." },
+            { id: 21, sentence: "Friction between surfaces ___ heat energy.", options: ["generate", "generates"], answer: "generates", reason: "'Friction' (Uncountable/Singular) &rarr; generates." },
+            { id: 22, sentence: "Stars ___ brightly in the night sky.", options: ["shine", "shines"], answer: "shine", reason: "'Stars' jamak &rarr; shine." },
+            { id: 23, sentence: "A caterpillar ___ metamorphosis to become a butterfly.", options: ["undergo", "undergoes"], answer: "undergoes", reason: "'A caterpillar' tunggal &rarr; undergoes." },
+            { id: 24, sentence: "Greenhouse gases ___ heat in the atmosphere.", options: ["trap", "traps"], answer: "trap", reason: "'Greenhouse gases' jamak &rarr; trap." },
+            { id: 25, sentence: "Glaciers ___ gradually as ambient temperature increases.", options: ["melt", "melts"], answer: "melt", reason: "'Glaciers' jamak &rarr; melt." }
+        ];
+
+        function renderPracticeQuiz() {
+            const container = document.getElementById('quiz-questions-list');
+            if (!container) return;
+
+            container.innerHTML = '';
+            practiceData.forEach((q) => {
+                const parts = q.sentence.split("___");
+                const card = document.createElement('div');
+                card.id = `q-card-${q.id}`;
+                card.className = "bg-white p-4 sm:p-5 rounded-2xl border border-slate-200 transition-all duration-300";
+
+                card.innerHTML = `
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                        <p class="text-xs sm:text-sm font-semibold text-slate-800 leading-relaxed">
+                            <span class="inline-block w-6 text-slate-400 font-bold">${q.id}.</span>
+                            ${parts[0]} <span class="px-2 py-0.5 bg-slate-100 text-indigo-600 font-bold rounded border border-slate-300">...</span> ${parts[1]}
+                        </p>
+                        <div class="flex items-center gap-2 flex-shrink-0 bg-slate-50 p-1.5 rounded-xl border border-slate-100">
+                            ${q.options.map(opt => `
+                                <label onclick="playInteractiveSound('click')" class="cursor-pointer flex items-center gap-1.5 px-3 py-1.5 bg-white hover:bg-indigo-50 rounded-lg border border-slate-200 text-xs font-bold text-slate-700 transition">
+                                    <input type="radio" name="p_q${q.id}" value="${opt}" class="accent-indigo-600 h-4 w-4">
+                                    <span>${opt}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div id="q-explain-${q.id}" class="hidden mt-3 pt-2 border-t border-slate-100 text-xs font-medium"></div>
+                `;
+
+                container.appendChild(card);
+            });
+        }
+
+        /* =========================================================
+           6. SUBMIT, VALIDATION & SCORE CALCULATION
+           ========================================================= */
+        function submitPracticeQuiz() {
+            let correctCount = 0;
+            let unansweredCount = 0;
+            const total = practiceData.length;
+
+            // Validate all answered
+            practiceData.forEach(q => {
+                const selected = document.querySelector(`input[name="p_q${q.id}"]:checked`);
+                const card = document.getElementById(`q-card-${q.id}`);
+
+                if (!selected) {
+                    unansweredCount++;
+                    card.classList.add('border-rose-400', 'bg-rose-50/50');
+                } else {
+                    card.classList.remove('border-rose-400', 'bg-rose-50/50');
+                }
+            });
+
+            const alertBox = document.getElementById('validation-alert');
+            if (unansweredCount > 0) {
+                playInteractiveSound('pop');
+                alertBox.classList.remove('hidden');
+                document.getElementById('validation-text').innerText = `Masih ada ${unansweredCount} soal yang belum dijawab! Harap lengkapi semua soal bertanda merah.`;
+                alertBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            } else {
+                alertBox.classList.add('hidden');
+            }
+
+            // Calculate Score & Show feedback per question
+            practiceData.forEach(q => {
+                const selected = document.querySelector(`input[name="p_q${q.id}"]:checked`).value;
+                const card = document.getElementById(`q-card-${q.id}`);
+                const explainDiv = document.getElementById(`q-explain-${q.id}`);
+
+                explainDiv.classList.remove('hidden', 'text-emerald-700', 'text-rose-700');
+
+                if (selected === q.answer) {
+                    correctCount++;
+                    card.className = "bg-emerald-50/60 p-4 sm:p-5 rounded-2xl border-2 border-emerald-500 transition-all";
+                    explainDiv.classList.add('text-emerald-700');
+                    explainDiv.innerHTML = `✅ <strong>Jawaban Tepat!</strong> ${q.reason}`;
+                } else {
+                    card.className = "bg-rose-50/60 p-4 sm:p-5 rounded-2xl border-2 border-rose-400 transition-all";
+                    explainDiv.classList.add('text-rose-700');
+                    explainDiv.innerHTML = `❌ <strong>Jawaban Kurang Tepat.</strong> Jawaban yang benar adalah <strong class="underline">${q.answer}</strong>. ${q.reason}`;
+                }
+            });
+
+            const wrongCount = total - correctCount;
+            const finalScore = Math.round((correctCount / total) * 100);
+
+            // Populate Modal
+            document.getElementById('modal-score').innerText = finalScore;
+            document.getElementById('modal-correct').innerText = correctCount;
+            document.getElementById('modal-wrong').innerText = wrongCount;
+
+            const emojiBadge = document.getElementById('modal-emoji-badge');
+            const titleEl = document.getElementById('modal-title');
+            const feedbackMsg = document.getElementById('modal-feedback-msg');
+
+            if (finalScore === 100) {
+                emojiBadge.innerText = '🏆';
+                titleEl.innerText = 'Sempurna! Nilai 100!';
+                feedbackMsg.innerText = 'Luar biasa! Kamu menguasai seluruh aturan Subject-Verb Agreement dengan sangat baik!';
+            } else if (finalScore >= 80) {
+                emojiBadge.innerText = '🎉';
+                titleEl.innerText = 'Hebat! Kamu Lulus!';
+                feedbackMsg.innerText = 'Kerja bagus! Pemahaman kamu tentang tata bahasa fakta ilmiah sudah sangat matang.';
+            } else if (finalScore >= 60) {
+                emojiBadge.innerText = '👍';
+                titleEl.innerText = 'Cukup Bagus!';
+                feedbackMsg.innerText = 'Kamu sudah paham dasarnya, pelajari kembali soal yang salah untuk hasil sempurna!';
+            } else {
+                emojiBadge.innerText = '📚';
+                titleEl.innerText = 'Tetap Semangat!';
+                feedbackMsg.innerText = 'Jangan menyerah! Coba baca lagi materi aturan Singular vs Plural di Tab 2 lalu coba lagi!';
+            }
+
+            // Play Celebration Sound & Trigger Confetti!
+            playInteractiveSound('fanfare');
+            triggerConfettiBurst();
+
+            // Show Modal
+            document.getElementById('result-modal').classList.remove('hidden');
+        }
+
+        function closeModalViewDiscussion() {
+            playInteractiveSound('pop');
+            document.getElementById('result-modal').classList.add('hidden');
+        }
+
+        function resetPracticeQuiz() {
+            playInteractiveSound('pop');
+            document.getElementById('result-modal').classList.add('hidden');
+            renderPracticeQuiz();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initialize on DOM Ready
+        window.addEventListener('DOMContentLoaded', () => {
+            switchTab('intro');
+            renderPracticeQuiz();
+        });
+    </script>
+</body>
+</html>
